@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yoga RAG App</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .warning { color: red; margin-top: 10px; }
+    .answer { margin-top: 15px; }
+  </style>
+</head>
+<body>
+
+  <h2>Ask Me Anything About Yoga</h2>
+
+  <input id="question" type="text" style="width:300px" placeholder="Ask about yoga..." />
+  <button onclick="ask()">Ask</button>
+
+  <div class="answer" id="answer"></div>
+  <div class="warning" id="warning"></div>
+
+  <script>
+    async function ask() {
+      const q = document.getElementById("question").value;
+
+      const res = await fetch("http://localhost:5000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: q })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("answer").innerText = data.answer;
+      document.getElementById("warning").innerText =
+        data.isUnsafe ? "⚠️ Safety Warning: Please consult a professional." : "";
+    }
+  </script>
+
+</body>
+</html>
